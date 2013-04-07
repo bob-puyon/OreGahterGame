@@ -1,3 +1,6 @@
+# ignore myself #
+.gitignore
+
 #ignore Class file #
 *.class
 
