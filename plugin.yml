@@ -1,0 +1,9 @@
+name: OreGatherGame
+version: 1.0
+description: Let play! Ore Gather Game!!.
+main: net.arlepuyon.OreGatherGame.OreGatherGame
+commands:
+  oregathergame:
+    description: This Plugin put a limit on Flyingtime by point system
+    aliases: [ogg]
+    usage: /oregathergame [operation]
