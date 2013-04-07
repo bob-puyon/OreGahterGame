@@ -61,6 +61,9 @@ public class OreGatherGame extends JavaPlugin{
 	public final static String logPrefix = "[OreGatherGame] ";
 	public final static String msgPrefix = "\u00A77[OreGatherGame] \u00A7f";
 
+	public final static long REALTIME_PERIOD = 1; //in Minute
+	public final static long TASK_PERIOD = 1200 * REALTIME_PERIOD;
+
 	//編集状態の確保
 	HashMap<String,EnumCommandStatus> cmdstate;
 
@@ -87,6 +90,9 @@ public class OreGatherGame extends JavaPlugin{
 
 		//コマンド「oregathergame(ogg)」を登録（詳しい動作は引数で捌く）
 		getCommand("oregathergame").setExecutor(new OGGCommandExecutor(this));
+
+		//使用ユーザーがいれば飛行ポイントチェックスレッドの起動
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, blockgen, 0L, TASK_PERIOD );
 
 		//起動メッセージ
 		PluginDescriptionFile file_pdf = this.getDescription();

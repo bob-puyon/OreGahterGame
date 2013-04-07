@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-public class OGGBlockGenerator {
+public class OGGBlockGenerator implements Runnable{
 
 	OreGatherGame plg;
 
@@ -51,6 +51,13 @@ public class OGGBlockGenerator {
 		for( Iterator<Location> iter_genloc = plg.genloc.iterator(); iter_genloc.hasNext();){
 			iter_genloc.next().getBlock().getRelative( BlockFace.UP ).setType( Material.AIR );
 		}
+	}
+
+	/* 時間経過ごとにブロックを生成する */
+	@Override
+	public void run() {
+		if( plg.genloc.isEmpty() ) return;
+		generateBlock();
 	}
 
 }
