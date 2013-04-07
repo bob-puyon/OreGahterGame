@@ -1,5 +1,8 @@
 package net.arlepuyon.OreGatherGame;
 
+
+//Second Commit
+
 public enum EnumCommandStatus {
 	ADD_POINT, //生成ポイント追加
 	DEL_POINT,
