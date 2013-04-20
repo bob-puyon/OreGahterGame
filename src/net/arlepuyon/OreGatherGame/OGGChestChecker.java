@@ -65,7 +65,7 @@ public class OGGChestChecker {
 					"スロット番号：" + contents.previousIndex() +
 					"\tアイテム名：" + item.getType().toString() +
 					"\t" + "個数：" + item.getAmount() );
-			*/
+			 */
 		}
 		plg.getServer().broadcastMessage( OreGatherGame.logPrefix + "このチェストの得点は " + total + "点 です");
 		OreGatherGame.logger.info( OreGatherGame.logPrefix + "このチェストの得点は " + total + " です");
@@ -84,12 +84,12 @@ public class OGGChestChecker {
 		point_table.put(Material.GOLD_ORE, 32);
 		point_table.put(Material.EMERALD_ORE, 64);
 		point_table.put(Material.DIAMOND_ORE, 128);
-
 		point_table.put(Material.QUARTZ_BLOCK, 2);
 		point_table.put(Material.REDSTONE_BLOCK, 4);
 		point_table.put(Material.LAPIS_BLOCK, 8);
 		point_table.put(Material.IRON_BLOCK, 16);
 		point_table.put(Material.GOLD_BLOCK, 32);
 		point_table.put(Material.EMERALD_BLOCK, 64);
-		point_table.put(Material.DIAMOND_BLOCK, 128);	}
+		point_table.put(Material.DIAMOND_BLOCK, 128);
+	}
 }

@@ -78,7 +78,7 @@ public class OGGCommandExecutor implements CommandExecutor {
 		}else if( args[0].equalsIgnoreCase("setcollectorB") ){
 			plg.setCommandState( player.getName() , EnumCommandStatus.SET_COLECTOR2 );
 			player.sendMessage(  OreGatherGame.msgPrefix + "指定されたアイテムでチームBの回収チェストを選んで下さい");
-		}else if( args[0].equalsIgnoreCase("remcollectorB") ){
+		}else if( args[0].equalsIgnoreCase("remcollectorA") ){
 			//削除処理
 			player.sendMessage(  OreGatherGame.msgPrefix + "チームAの回収チェストの登録が解除されました");
 		}else if( args[0].equalsIgnoreCase("remcollectorB") ){

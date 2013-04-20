@@ -101,8 +101,8 @@ public class OGGEventListener implements Listener {
 			case SET_COLECTOR2:
 				//クリック対象がチェストでは無い場合拒否
 				if( select_block.getType() == Material.CHEST ){
-					plg.setCollecterBox1( select_block.getLocation() );
-					p.sendMessage( OreGatherGame.msgPrefix + "チーム２の回収チェストの登録を削除しました！");
+					plg.setCollecterBox2( select_block.getLocation() );
+					p.sendMessage( OreGatherGame.msgPrefix + "指定したチェストをチーム２の回収用に登録しました！");
 				}else{
 					p.sendMessage( OreGatherGame.msgPrefix + "指定したブロックはチェストではありません！");
 				}

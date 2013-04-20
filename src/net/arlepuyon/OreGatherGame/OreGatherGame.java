@@ -55,7 +55,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * 【放送向け実装】
  * 得点計算と結果表示はコマンドによるコール制にする
 
-*/
+ */
 
 public class OreGatherGame extends JavaPlugin{
 
@@ -97,7 +97,7 @@ public class OreGatherGame extends JavaPlugin{
 	Location CollecterBox2;
 
 	@Override
-    public void onEnable(){
+	public void onEnable(){
 		//initialize
 		chestchk = new OGGChestChecker( this );
 		blockgen = new OGGBlockGenerator( this );
@@ -110,6 +110,7 @@ public class OreGatherGame extends JavaPlugin{
 
 		//イベントリスナーの登録
 		getServer().getPluginManager().registerEvents( new OGGEventListener(this) , this);
+		getServer().getPluginManager().registerEvents( new OGGPlayerEventListener(this) , this);
 
 		//コマンド「oregathergame(ogg)」を登録（詳しい動作は引数で捌く）
 		getCommand("oregathergame").setExecutor(new OGGCommandExecutor(this));
@@ -120,23 +121,23 @@ public class OreGatherGame extends JavaPlugin{
 		//起動メッセージ
 		PluginDescriptionFile file_pdf = this.getDescription();
 		logger.info("[" +file_pdf.getName()+ "] v" + file_pdf.getVersion() + " is enabled!");
-    }
+	}
 
-    @Override
-    public void onDisable() {
-    	saveGameConfig();
+	@Override
+	public void onDisable() {
+		saveGameConfig();
 
-    	PluginDescriptionFile file_pdf = this.getDescription();
+		PluginDescriptionFile file_pdf = this.getDescription();
 		logger.info("[" +file_pdf.getName()+ "] v" + file_pdf.getVersion() + " is disabled!");
-    }
+	}
 
-    /* プラグイン load 用 */
-    public void loadGameConfig(){
-    	File configFile = new File(getDataFolder(), PLUGIN_CONFIGFILE );
+	/* プラグイン load 用 */
+	public void loadGameConfig(){
+		File configFile = new File(getDataFolder(), PLUGIN_CONFIGFILE );
 		configData = new YamlConfiguration();
 
 		//別の方法でファイルの有無を取得した方がいい？
-    	if( !configFile.exists() ){
+		if( !configFile.exists() ){
 			saveDefaultConfig();
 			logger.info( logPrefix + "Create Default Configration" );
 			configFile = new File(getDataFolder(), PLUGIN_CONFIGFILE );
@@ -170,70 +171,70 @@ public class OreGatherGame extends JavaPlugin{
 			logger.warning( logPrefix + "Generate Block is defined " + gen_block.name() );
 		}
 		String locstr;
-    	//チームAの回収ボックス場所保存
-    	if( (locstr = configData.getString("register_positon.chestA")) != null ){
-    		CollecterBox1 = convertStringToLocation(locstr);
-    	}
-    	//チームBの回収ボックス場所保存
-    	if( (locstr = configData.getString("register_positon.chestB")) != null ){
-    		CollecterBox2 = convertStringToLocation(locstr);
-    	}
-    	//ブロック生成ポイントの読み込み
-    	List<String> conf_genloc = configData.getStringList("register_positon.block_loc");
-    	genloc.clear();
+		//チームAの回収ボックス場所保存
+		if( (locstr = configData.getString("register_positon.chestA")) != null ){
+			CollecterBox1 = convertStringToLocation(locstr);
+		}
+		//チームBの回収ボックス場所保存
+		if( (locstr = configData.getString("register_positon.chestB")) != null ){
+			CollecterBox2 = convertStringToLocation(locstr);
+		}
+		//ブロック生成ポイントの読み込み
+		List<String> conf_genloc = configData.getStringList("register_positon.block_loc");
+		genloc.clear();
 
-    	for( Iterator<String> itgp = conf_genloc.iterator(); itgp.hasNext();){
-    		genloc.add( convertStringToGenerateLocation( itgp.next() ) );
-    	}
-    	//設定保存がうまくいかない場合はリストクリアを行う（開発終了後消去）
-    	if( genloc.contains( null )){
-    		genloc.clear();
-    		logger.info( logPrefix + "Registerd BlockLocation is cleared to mend" );
-    	}
-    	return;
-    }
+		for( Iterator<String> itgp = conf_genloc.iterator(); itgp.hasNext();){
+			genloc.add( convertStringToGenerateLocation( itgp.next() ) );
+		}
+		//設定保存がうまくいかない場合はリストクリアを行う（開発終了後消去）
+		if( genloc.contains( null )){
+			genloc.clear();
+			logger.info( logPrefix + "Registerd BlockLocation is cleared to mend" );
+		}
+		return;
+	}
 
-    /* プラグイン設定 save コマンド用 */
-    public void saveGameConfig(){
+	/* プラグイン設定 save コマンド用 */
+	public void saveGameConfig(){
 
-    	//チームAの回収ボックス場所保存
-    	if( CollecterBox1 != null ){
-    		configData.set("register_positon.chestA", convertLocationToString(CollecterBox1) );
-        }else{
-        	configData.set("register_positon.chestA", null );
-        }
-    	//チームBの回収ボックス場所保存
-        if( CollecterBox2 != null ){
-        	configData.set("register_positon.chestB", convertLocationToString(CollecterBox2) );
-        }else{
-        	configData.set("register_positon.chestB", null );
-        }
+		//チームAの回収ボックス場所保存
+		if( CollecterBox1 != null ){
+			configData.set("register_positon.chestA", convertLocationToString(CollecterBox1) );
+		}else{
+			configData.set("register_positon.chestA", null );
+		}
+		//チームBの回収ボックス場所保存
+		if( CollecterBox2 != null ){
+			configData.set("register_positon.chestB", convertLocationToString(CollecterBox2) );
+		}else{
+			configData.set("register_positon.chestB", null );
+		}
 
-    	List<String> reg = new LinkedList<String>();
-    	//鉱石プライオリティと一緒に設定
-    	for( Iterator<GenerateLocation> iter_genloc = genloc.iterator(); iter_genloc.hasNext();){
-    		GenerateLocation gl = iter_genloc.next();
-		    reg.add( convertLocationToString( gl.getLocation()) +","+ gl.getBlockGrade() );
-    	}
-    	configData.set("register_positon.block_loc" , reg);
+		//鉱石生成ポイントを鉱石のプライオリティと一緒に保存
+		List<String> reg = new LinkedList<String>();
+		for( Iterator<GenerateLocation> iter_genloc = genloc.iterator(); iter_genloc.hasNext();){
+			GenerateLocation gl = iter_genloc.next();
+			reg.add( convertLocationToString( gl.getLocation()) +","+ gl.getBlockGrade() );
+		}
+		configData.set("register_positon.block_loc" , reg);
 
-    	//【TODO:ファイル保存順の整理】
-    	File playerFile = new File(getDataFolder(), PLUGIN_CONFIGFILE );
+		//【TODO:ファイル保存順の整理】
+		File playerFile = new File(getDataFolder(), PLUGIN_CONFIGFILE );
 		try {
 			configData.save(playerFile);
 		} catch (IOException e) {
 			logger.warning("Failed to save players.yml, fly times will not be saved!");
 		}
-    }
+	}
 
-    /* プラグイン設定 reload コマンド用 */
-    public void reloadConfig(){
-    	return;
-    }
+	/* プラグイン設定 reload コマンド用 */
+	public void reloadConfig(){
+		return;
+	}
 
-    // 回収チェスト用の文字列からゲーム用Location作成
-    public Location convertStringToLocation(String str){
-    	String[] genlocstr = str.split(",");
+	// 回収チェスト用の文字列からゲーム用Location作成
+	public Location convertStringToLocation(String str){
+		String[] genlocstr = str.split(",");
 
 		if( genlocstr.length != 4 ){
 			logger.severe( logPrefix + "Registerd BlockLocation format is broken!" );
@@ -245,9 +246,9 @@ public class OreGatherGame extends JavaPlugin{
 				Double.valueOf(genlocstr[1]),
 				Double.valueOf(genlocstr[2]),
 				Double.valueOf(genlocstr[3]));
-    }
+	}
 
-    /* 生成ポイント設定用の文字列からゲーム用リスト作成 */
+	/* 生成ポイント設定用の文字列からゲーム用リスト作成 */
 	public GenerateLocation convertStringToGenerateLocation(String str){
 		String[] genlocstr = str.split(",");
 
@@ -258,10 +259,10 @@ public class OreGatherGame extends JavaPlugin{
 		}
 
 		Location loc = new Location(
-					this.getServer().getWorld(genlocstr[0]),
-					Double.valueOf(genlocstr[1]),
-					Double.valueOf(genlocstr[2]),
-					Double.valueOf(genlocstr[3]));
+				this.getServer().getWorld(genlocstr[0]),
+				Double.valueOf(genlocstr[1]),
+				Double.valueOf(genlocstr[2]),
+				Double.valueOf(genlocstr[3]));
 		String blockgrade = genlocstr[4];
 		return new GenerateLocation( loc , blockgrade );
 	}
@@ -271,7 +272,7 @@ public class OreGatherGame extends JavaPlugin{
 		return (loc.getWorld().getName() +","+ loc.getBlockX() +","+ loc.getBlockY() +","+ loc.getBlockZ() );
 	}
 
-    /* ブロック生成ポイント用 Getter Setter*/
+	/* ブロック生成ポイント用 Getter Setter*/
 	void setCommandState( String playername, EnumCommandStatus state){
 		cmdstate.put( playername, state);
 	}
