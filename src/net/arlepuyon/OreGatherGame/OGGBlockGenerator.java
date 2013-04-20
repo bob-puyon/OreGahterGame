@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,7 +16,7 @@ public class OGGBlockGenerator implements Runnable{
 		this.plg = plg_instance;
 	}
 	/* ブロックランダム生成のメソッド */
-	private final static double kakuritu = 0.1;
+	private final static double kakuritu = 0.75;
 
 
 	/* TODO:generateBlockには生成鉱石IDと確率を渡す設計にする */
@@ -28,12 +27,12 @@ public class OGGBlockGenerator implements Runnable{
 
 		//生成ポイントランダム化のために配列複製後シャッフル
 		@SuppressWarnings("unchecked")
-		ArrayList<Location> genpoint = (ArrayList<Location>) plg.genloc.clone();
+		ArrayList<GenerateLocation> genpoint = (ArrayList<GenerateLocation>) plg.genloc.clone();
 		Collections.shuffle(genpoint);
 
 		//シャッフルされた配列に対して前半○○％が生成ポイントに選出
 		for( int i=0; i<genpoint.size() * kakuritu ; i++ ){
-			Block bk = genpoint.get(i).getBlock().getRelative( BlockFace.UP );
+			Block bk = genpoint.get(i).getLocation().getBlock().getRelative( BlockFace.UP );
 			//TODO:まだ前ウェーブの鉱石が破壊されていない場合の処理はどうする？
 			//基本的に試合後半のウェーブの鉱石を価値の高いものにするため
 			//すでに鉱石が存在しているとしても上書きする
@@ -48,8 +47,8 @@ public class OGGBlockGenerator implements Runnable{
 
 	/* 鉱石ブロック生成前のブロックのクリア */
 	void preClearBlock(){
-		for( Iterator<Location> iter_genloc = plg.genloc.iterator(); iter_genloc.hasNext();){
-			iter_genloc.next().getBlock().getRelative( BlockFace.UP ).setType( Material.AIR );
+		for( Iterator<GenerateLocation> iter_genloc = plg.genloc.iterator() ; iter_genloc.hasNext();){
+			iter_genloc.next().getLocation().getBlock().getRelative( BlockFace.UP ).setType( Material.AIR );
 		}
 	}
 

@@ -1,5 +1,7 @@
 package net.arlepuyon.OreGatherGame;
 
+import java.util.Iterator;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -96,12 +98,18 @@ public class OGGCommandExecutor implements CommandExecutor {
 			}
 		}else if( args[0].equalsIgnoreCase("gen") ){
 			plg.blockgen.generateBlock();
+		}else if( args[0].equalsIgnoreCase("genlist")){
+			for( Iterator<GenerateLocation> iter_genloc = plg.genloc.iterator(); iter_genloc.hasNext();){
+			    player.sendMessage( iter_genloc.next().getLocation().toString() );
+			}
 		}else{
 			return true;
 		}
 
 		return true;
 	}
+
+
 
 	/* --------------------------------------------------------- */
 

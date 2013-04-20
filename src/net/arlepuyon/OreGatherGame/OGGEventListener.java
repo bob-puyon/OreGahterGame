@@ -37,8 +37,8 @@ public class OGGEventListener implements Listener {
 		}
 
 		/* [テスト]岩盤を持っていなかった場合拒否 */
-		if( p.getItemInHand().getType() != Material.BEDROCK ){
-			p.sendMessage("この設定を行うためには岩盤ブロックを持つ必要があります");
+		if( p.getItemInHand().getType() != OreGatherGame.wand ){
+			p.sendMessage("この設定を行うためには ID:" + OreGatherGame.wand.getId() + " のアイテムを持つ必要があります");
 			return;
 		}
 
@@ -67,7 +67,7 @@ public class OGGEventListener implements Listener {
 				//すでにブロックの場所が登録されているか確認
 				//TODO:後で
 				if( !idRegisteredLocation( select_block.getLocation() ) ){
-					plg.genloc.add( select_block.getLocation() );
+					plg.genloc.add( new GenerateLocation( select_block.getLocation(), "Priority1" ));
 					p.sendMessage( OreGatherGame.msgPrefix + "新しいブロック生成ポイントが作成されました！");
 				}else{
 					p.sendMessage( OreGatherGame.msgPrefix + "すでに登録済みのブロック生成ポイントです！");
@@ -125,14 +125,14 @@ public class OGGEventListener implements Listener {
 	/* */
 	/* [テスト]クリック対象のブロックを取得し鉄ブロック以外の場合は拒否 */
 	boolean canResisteredBlock( Block bk ){
-		return bk.getType() != Material.IRON_BLOCK ? false : true ;
+		return bk.getType() != OreGatherGame.gen_block ? false : true ;
 	}
 
 	/* 指定したブロックのLocationがすでに存在するか判定 */
 	boolean idRegisteredLocation( Location loc ){
 
-		for( Iterator<Location> loc_iter = plg.genloc.iterator(); loc_iter.hasNext(); ){
-			Location altloc = loc_iter.next();
+		for( Iterator<GenerateLocation> loc_iter = plg.genloc.iterator(); loc_iter.hasNext(); ){
+			Location altloc = loc_iter.next().getLocation();
 			if( altloc.equals( loc ) ){ return true; }
 		}
 

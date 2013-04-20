@@ -1,5 +1,5 @@
 name: OreGatherGame
-version: 1.0
+version: 1.01
 description: Let play! Ore Gather Game!!.
 main: net.arlepuyon.OreGatherGame.OreGatherGame
 commands:
